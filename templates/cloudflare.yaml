@@ -1,0 +1,31 @@
+{{- if .Values.cloudflare.enabled }}
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: ClusterIssuer
+metadata:
+  name: dns-cloudflare
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: {{ .Values.email }}
+    privateKeySecretRef:
+      name: {{ .Values.privateKeySecretRef }}
+    dns01:
+      providers:
+        - name: cloudflare
+          cloudflare:
+            email: {{ .Values.cloudflare.email }}
+            apiKeySecretRef:
+              name: {{ .Values.cloudflare.secretName }}
+              key: {{ .Values.cloudflare.secretKey }}
+---
+{{- if .Values.cloudflare.createSecret }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.cloudflare.secretName }}
+  namespace: {{ .Values.cloudflare.secretNamespace }}
+stringData:
+  {{ .Values.cloudflare.secretKey}}: {{ .Values.cloudflare.apiKey }}
+---
+{{- end }}
+{{- end }}

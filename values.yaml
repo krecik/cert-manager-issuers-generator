@@ -1,0 +1,23 @@
+email: mail@example.com
+ingressClass: nginx
+privateKeySecretRef: letsencrypt
+
+httpIssuer:
+  enabled: true
+
+route53Issuer:
+  enabled: true
+  region: eu-west-1
+
+clouddns:
+  enabled: false
+  project: not-provided
+
+cloudflare:
+  enabled: false
+  email: not-provided
+  secretNamespace: cert-manager
+  secretName: cloudflare-api
+  secretKey: api-key
+  createSecret: false
+  apiKey: not-provided

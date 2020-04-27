@@ -1,0 +1,17 @@
+{{- if .Values.httpIssuer.enabled }}
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: http
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: {{ .Values.email }}
+    privateKeySecretRef:
+      name: {{ .Values.privateKeySecretRef }}
+    solvers:
+    - http01:
+        ingress:
+          class:  {{ .Values.ingressClass }}
+---
+{{- end }}
