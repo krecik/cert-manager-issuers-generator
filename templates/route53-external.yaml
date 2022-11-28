@@ -1,0 +1,21 @@
+{{- if .Values.route53ExternalIssuer.enabled }}
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: dns-route53
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: {{ .Values.email }}
+    privateKeySecretRef:
+      name: {{ .Values.privateKeySecretRef }}
+    solvers:
+    - dns01:
+        route53:
+          region: {{ .Values.route53ExternalIssuer.region }}
+          accessKeyID: {{ .Values.route53ExternalIssuer.keyID }}
+          secretAccessKeySecretRef:
+            name: {{ .Values.route53ExternalIssuer.secretName }}
+            key: {{ .Values.route53ExternalIssuer.secretKey }}
+---
+{{- end }}
